@@ -13,6 +13,7 @@ function extractAnimeDetail(element: Element): Anime{
   const mal_score = element.querySelectorAll('.anisc-detail .anisc-info-wrap .anisc-info .item-title .name')[1]?.textContent?.trim() || '';
   const rating = element.querySelectorAll('.anisc-detail .anisc-info-wrap .anisc-info .item-title .name')[2]?.textContent?.trim() || '';
   const season = element.querySelectorAll('.anisc-detail .anisc-info-wrap .anisc-info .item-title .name')[3]?.textContent?.trim() || '';
+  const type = element.querySelectorAll('.anisc-detail .anisc-info-wrap .anisc-info .item-title')[6]?.textContent?.replace('Type:','').trim() || '';
   const status = element.querySelectorAll('.anisc-detail .anisc-info-wrap .anisc-info .item-title')[7]?.textContent?.replace('Status:','').trim() || '';
   const genre = element.querySelectorAll('.anisc-detail .anisc-info-wrap .anisc-info .item-list a');
   const batch = element.querySelectorAll('.anisc-detail .film-buttons .batch-links a');
@@ -33,7 +34,8 @@ function extractAnimeDetail(element: Element): Anime{
     mal_score,
     rating,
     status,
-    batch:[]
+    batch:[],
+    type
   }
 
   infoEpisode.forEach(item => {

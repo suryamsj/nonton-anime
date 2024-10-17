@@ -22,7 +22,7 @@
   <!-- Content Container -->
   <div class="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
     <!-- Title -->
-    <a href="/detail/{slug}" class="text-2xl font-bold text-white mb-2">{title}</a>
+    <a href={episode !== "Movie" ? `/anime/${slug}` : `/watch/movie/${slug}`} class="text-2xl font-bold text-white mb-2">{title}</a>
     
     <!-- sub -->
     <p class="text-gray-300 text-sm mb-3">{sub}</p>
@@ -33,7 +33,7 @@
         Episode: {episode}
       </div>
       <div class="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1">
-        {season}
+        {season ? season : '-'}
       </div>
     </div>
     

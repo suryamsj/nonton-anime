@@ -10,7 +10,17 @@ export const load: PageServerLoad = async ({fetch}) => {
     } catch (e) {
       throw error(500, (e as Error).message);
     }
-  }  
+  }
+  
+  async function getCompleteAnime() {
+    try {
+      const response = await fetch('/api/status/ended');
+      const data = await response.json();
+      return data.data;
+    } catch (e) {
+      throw error(500, (e as Error).message);
+    }
+  }
 
-  return {animeList: await getAnime()}
+  return {animeList: getAnime(), animeComplete: getCompleteAnime()}
 };

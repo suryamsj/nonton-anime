@@ -27,6 +27,7 @@ export interface Anime{
   genre?: Genre[];
   rating?: string;
   batch?: Batch[];
+  type?: string;
 }
 
 interface Episode{
