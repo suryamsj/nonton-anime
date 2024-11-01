@@ -1,15 +1,16 @@
 <script>
-	import AnimeDetailSkeleton from '$lib/components/AnimeDetailSkeleton.svelte';
-import { Star, Play, Download, Tag } from 'lucide-svelte';
+	import Seo from '$lib/components/Seo.svelte';
+  import { Star, Play, Download, Tag } from 'lucide-svelte';
+
+  import * as config from "$lib/utils/config";
 
   export let data;
 
   $: ({ anime } = data);
 </script>
 
-{#await anime}
-  <AnimeDetailSkeleton />
-{:then anime}
+<Seo title="{anime.title} - {config.title}: {config.slogan}" />
+
 <section class="py-5">
   <div class="container mx-auto">
     <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
@@ -46,7 +47,7 @@ import { Star, Play, Download, Tag } from 'lucide-svelte';
               
               <!-- Status and Rating -->
               <div class="flex gap-4 mb-4">
-                <a href="/status/{anime?.status?.toLowerCase()}" class="bg-blue-500 px-3 py-1 rounded-full text-sm flex gap-1 items-center">
+                <a href="/status/{anime?.status === "Tamat" ? "ended" : "ongoing"}" class="bg-blue-500 px-3 py-1 rounded-full text-sm flex gap-1 items-center">
                   <Tag size={16} /> {anime.status}
                 </a>
                 <span class="bg-purple-500 px-3 py-1 rounded-full text-sm">
@@ -102,7 +103,7 @@ import { Star, Play, Download, Tag } from 'lucide-svelte';
                 </div>
                 <div>
                   <h3 class="text-gray-500 dark:text-gray-400">Season</h3>
-                  <p class="dark:text-white">{anime.season ? anime.season : '-'}</p>
+                   <a class="dark:text-white dark:hover:text-blue-500" href="/season/{anime.season ? anime.season.replace(' ','-').toLowerCase() : '#'}">{anime.season ? anime.season : '-'}</a>
                 </div>
                 <div>
                   <h3 class="text-gray-500 dark:text-gray-400">Subtitle</h3>
@@ -136,6 +137,3 @@ import { Star, Play, Download, Tag } from 'lucide-svelte';
     </div>
   </div>
 </section>
-{:catch error}
-<p class="text-center col-span-3">{error}</p>
-{/await}

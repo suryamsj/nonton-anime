@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AnimeCard from "$lib/components/AnimeCard.svelte";
 	import AnimeCardSkeleton from "$lib/components/AnimeCardSkeleton.svelte";
+	import Seo from "$lib/components/Seo.svelte";
 
   export let data;
 
@@ -9,6 +10,9 @@
 
   const totalCard: number = 24;
 </script>
+
+<Seo />
+
 <section class="py-5">
   <div class="container mx-auto">
     <div class="flex flex-col space-y-6">

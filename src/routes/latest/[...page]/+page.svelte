@@ -1,12 +1,24 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import AnimeCard from "$lib/components/AnimeCard.svelte";
 	import AnimeCardSkeleton from "$lib/components/AnimeCardSkeleton.svelte";
+	import Pagination from "$lib/components/Pagination.svelte";
+	import Seo from "$lib/components/Seo.svelte";
+  import * as config from "$lib/utils/config";
 
   export let data;
 
   $: ({animeList} = data);
-  const totalCard: number = 24;
+  $: ({pagination} = data);
+
+  $: currentPage = parseInt($page.params.page) || 1;
+  $: totalPages = pagination[0].max;
+
+  const totalCard: number = 24;  
 </script>
+
+<Seo title="Anime Terbaru - {config.title}: {config.slogan}" />
+
 <section class="py-5">
   <div class="container mx-auto">
     <div class="flex flex-col space-y-6">
@@ -33,6 +45,8 @@
           <p class="text-center col-span-3">{error}</p>
         {/await}
       </div>
+
+      <Pagination {currentPage} {totalPages} baseRoute="/latest" />
     </div>
   </div>
 </section>

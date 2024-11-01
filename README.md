@@ -54,11 +54,10 @@ AnimeKuy is a platform for streaming and downloading anime with Indonesian subti
 - [x] Latest Anime
 - [x] Movie
 - [x] Watch
-- [ ] Status
-- [ ] Year
-- [ ] Genre
-- [ ] Season
-- [ ] Type
+- [x] Status
+- [x] Year
+- [x] Genre
+- [x] Season
 - [ ] Search
 - [ ] AI Recomendation
 

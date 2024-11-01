@@ -5,6 +5,7 @@ import { json } from "@sveltejs/kit";
 import { BASE_URL_ANIME } from "$env/static/private";
 import { parseAnimeInfo } from "$lib/helper/extrackAnime";
 import { parseAnimeGenre } from "$lib/helper/extrackGenre";
+import { parsePagination } from "$lib/helper/extrackPagination";
 
 export const GET: RequestHandler = async ({params, fetch}) => {
   try {
@@ -15,14 +16,17 @@ export const GET: RequestHandler = async ({params, fetch}) => {
     const html = await response.text();
 
     let parseFunction: Genre[] | Anime[];
+    let pagination;    
 
     if(slug){
-      parseFunction = parseAnimeInfo(html);
+      parseFunction = parseAnimeInfo(html);      
+      pagination = parsePagination(html);      
     }else{
       parseFunction = parseAnimeGenre(html);
+      pagination = null;
     }
 
-    return json({status:true, data: parseFunction},{status:200})
+    return json({status:true, data: parseFunction, pagination},{status:200})
   } catch (e) {
     return json({status:false, message:(e as Error).message},{status:500})
   }

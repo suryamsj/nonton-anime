@@ -5,6 +5,7 @@ import type { Year } from "$lib/types/year";
 import type { Anime } from "$lib/types/anime";
 import { parseAnimeInfo } from "$lib/helper/extrackAnime";
 import { parseAnimeYear } from "$lib/helper/extrackYear";
+import { parsePagination } from "$lib/helper/extrackPagination";
 
 export const GET: RequestHandler = async ({fetch, params}) => {
  try {
@@ -15,14 +16,17 @@ export const GET: RequestHandler = async ({fetch, params}) => {
   const html = await response.text();
 
   let parseFunction: Year[] | Anime[];
+  let pagination;
 
   if(slug){
     parseFunction = parseAnimeInfo(html);
+    pagination = parsePagination(html);
   }else{
     parseFunction = parseAnimeYear(html);
+    pagination = null;
   }
   
-  return json({status:true, data: parseFunction},{status:200})
+  return json({status:true, data: parseFunction, pagination},{status:200})
  } catch (e) {
   return json({status:false, message:(e as Error).message},{status:500})
  }

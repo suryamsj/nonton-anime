@@ -14,5 +14,5 @@ export const load: PageServerLoad = async ({fetch, params}) => {
 
   const {slug} = params;
 
-  return {anime: getDetailAnime(slug)}
+  return {anime: await getDetailAnime(slug)}
 };

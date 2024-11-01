@@ -2,7 +2,7 @@ import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({fetch, params}) => {
-  async function getMovie(url: string) {
+  async function getAnime(url: string) {
     try {
       const response = await fetch(url);
       const data = await response.json();
@@ -22,9 +22,9 @@ export const load: PageServerLoad = async ({fetch, params}) => {
     }
   }
 
-  const {page} = params;
-  const url = page ? `/api/movie/${page}` : '/api/movie';
-  const base = '/api/movie';
-
-  return {movieList: getMovie(url), pagination: await getPagination(base)}
+  const [slug, page] = params.slugpage.split('/');
+  const url = `/api/year/${slug}${page ? `/${page}` : ''}`;
+  const base = `/api/year/${slug}`;
+  
+  return {animeList: getAnime(url), pagination: await getPagination(base)}
 };

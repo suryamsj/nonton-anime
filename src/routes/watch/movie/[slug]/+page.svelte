@@ -3,6 +3,8 @@
 	import type { AnimeDetail, Server } from '$lib/types/anime.js';
   import { Play, Download } from 'lucide-svelte';
   import { onMount } from 'svelte';
+  import * as config from "$lib/utils/config";
+	import Seo from '$lib/components/Seo.svelte';
 
   export let data: { anime: AnimeDetail };
 
@@ -47,6 +49,8 @@
     setDefaultServer();
   });
 </script>
+
+<Seo title="Nonton {anime.title} - {config.title}: {config.slogan}" />
 
 <section class="py-5">
   <div class="container mx-auto">
@@ -104,7 +108,7 @@
               <div class="space-y-4">
                 <div>
                   <h3 class="text-gray-500 dark:text-gray-400">Status</h3>
-                  <p class="dark:text-white">{anime.status}</p>
+                  <a href="/status/{anime.status === "Tamat" ? "ended" : "ongoing"}" class="dark:text-white dark:hover:text-blue-500">{anime.status}</a>
                 </div>
                 <div>
                   <h3 class="text-gray-500 dark:text-gray-400">Tipe</h3>
@@ -112,7 +116,7 @@
                 </div>
                 <div>
                   <h3 class="text-gray-500 dark:text-gray-400">Tahun</h3>
-                  <p class="dark:text-white">{anime.year}</p>
+                  <a href="/year/{anime.year}" class="dark:text-white dark:hover:text-blue-500">{anime.year}</a>
                 </div>
                 <div>
                   <h3 class="text-gray-500 dark:text-gray-400">Subtitle</h3>
@@ -126,11 +130,13 @@
               <h2 class="text-2xl font-bold mb-4 dark:text-white">Episode List</h2>
               <div class="h-[300px] overflow-y-auto pr-4 space-y-2">
                 {#each anime.episode as ep}
-                  <a href="/watch/{anime.type.toLowerCase()}/{ep.slug}" 
-                     class="block bg-white dark:bg-gray-600 p-3 rounded shadow hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors">
-                    <span class="font-bold dark:text-white">Episode {ep.number}:</span>
-                    <span class="dark:text-gray-300">{ep.title}</span>
-                  </a>
+                <a href="/watch/{anime.type.toLowerCase()}/{ep.slug}" 
+                class="block bg-white dark:bg-gray-600 p-3 rounded shadow hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors">
+               <span class="font-bold dark:text-white">Episode {ep.number}:</span>
+               <span class="dark:text-gray-300">{ep.title}</span>
+             </a>
+                {:else}
+                   <p class="dark:text-white">Daftar episode tidak ada</p>
                 {/each}
               </div>
             </div>

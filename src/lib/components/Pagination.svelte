@@ -1,52 +1,76 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+
   export let currentPage: number;
   export let totalPages: number;
-  export let onPageChange: (page: number) => void;
+  export let baseRoute: string = '';
 
-  $: pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  
-  $: visiblePages = pages.filter(page => {
-    if (page === 1 || page === totalPages) return true;
-    if (page >= currentPage - 1 && page <= currentPage + 1) return true;
-    return false;
-  });
-
-  $: pagesWithEllipsis = visiblePages.reduce((acc: (number | string)[], page, i) => {
-    if (i > 0 && visiblePages[i - 1] !== page - 1) {
-      acc.push('...');
+  function getPageNumbers(current: number, total: number): (number | string)[] {
+    if (total <= 10) {
+      return Array.from({ length: total }, (_, i) => i + 1);
     }
-    acc.push(page);
-    return acc;
-  }, []);
+
+    const pages: (number | string)[] = [];
+    
+    for (let i = 1; i <= 3; i++) {
+      pages.push(i);
+    }
+    
+    if (current <= 4) {
+      pages.push('...', total);
+    } else if (current >= total - 3) {
+      pages.push('...', total - 2, total - 1, total);
+    } else {
+      pages.push('...', current - 1, current, current + 1, '...', total);
+    }
+    
+    return pages;
+  }
+
+  $: pageNumbers = getPageNumbers(currentPage, totalPages);
+  
+  $: route = baseRoute;
+
+  async function handlePageClick(page: number | string) {
+    if (typeof page === 'number' && page !== currentPage) {
+      const newUrl = `${route}/${page}`;
+      await goto(newUrl, { 
+        replaceState: false
+      });
+    }
+  }
 </script>
 
-<div class="flex justify-center items-center gap-2 my-6">
+<nav class="flex justify-center items-center space-x-2 my-4">
+  <!-- Previous button -->
   <button
-    on:click={() => onPageChange(currentPage - 1)}
+    on:click={() => handlePageClick(currentPage - 1)}
     disabled={currentPage === 1}
-    class="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+    class="px-3 py-2 rounded-lg text-white hover:bg-light-hover disabled:opacity-50 disabled:cursor-not-allowed border border-primary bg-primary hover:text-dark"
   >
-    Previous
+    &lt;
   </button>
 
-  {#each pagesWithEllipsis as page}
+  <!-- Page numbers -->
+  {#each pageNumbers as page}
     {#if page === '...'}
-      <span class="px-3 py-1">{page}</span>
+      <span class="px-3 py-2 rounded-lg bg-primary text-light hover:bg-primary-hover border border-primary">...</span>
     {:else}
       <button
-        on:click={() => onPageChange(Number(page))}
-        class="px-3 py-1 rounded-lg {currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}"
+        on:click={() => handlePageClick(page)}
+        class="px-3 py-2 rounded-lg {currentPage === page ? 'bg-primary text-light' : 'bg-primary text-light hover:bg-primary-hover'} border border-primary"
       >
         {page}
       </button>
     {/if}
   {/each}
 
+  <!-- Next button -->
   <button
-    on:click={() => onPageChange(currentPage + 1)}
+    on:click={() => handlePageClick(currentPage + 1)}
     disabled={currentPage === totalPages}
-    class="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+    class="px-3 py-2 rounded-lg text-white hover:bg-light-hover disabled:opacity-50 disabled:cursor-not-allowed border border-primary bg-primary hover:text-dark"
   >
-    Next
+    &gt;
   </button>
-</div>
+</nav>

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Seo from '$lib/components/Seo.svelte';
 	import type { AnimeDetail, Server } from '$lib/types/anime.js';
   import { Play, Download } from 'lucide-svelte';
   import { onMount } from 'svelte';
+  import * as config from "$lib/utils/config";
 
   export let data: { anime: AnimeDetail };
 
@@ -47,6 +49,8 @@
     setDefaultServer();
   });
 </script>
+
+<Seo title="Nonton {anime.title} - {config.title}: {config.slogan}" />
 
 <section class="py-5">
   <div class="container mx-auto">
